@@ -18,12 +18,12 @@ var Led1Status;
 
 database.ref().on("value", function(snap){
   Led1Status = snap.val().Led1Status;
-  if(Led1Status == "1"){    // check from the firebase
-    //$(".Light1Status").text("The light is off");
+  if(Led1Status == "1"){
+    //console.log("The light is off");
     document.getElementById("unact").style.display = "none";
     document.getElementById("act").style.display = "block";
   } else {
-    //$(".Light1Status").text("The light is on");
+    //console.log("The light is on");
     document.getElementById("unact").style.display = "block";
     document.getElementById("act").style.display = "none";
   }

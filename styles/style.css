@@ -1,18 +1,20 @@
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 body{
-  background: #031321;
   overflow: hidden;
 }
 
 .wrapper{
-  height:100vh;
+  background: #101010;
+  height: 100vh;
   width: 100%;
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  /* justify-content: space-between; */
   align-items: center;
 
   position: relative;
@@ -21,11 +23,7 @@ body{
 .wrapper h1{
   font-size: 6rem;
   color: #21ecf3;
-
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  z-index: 10;
+  display: none;
 }
 
 video{
@@ -33,6 +31,6 @@ video{
 }
 
 #sketch-container{
-  width: 80%;
-  height: 60%;
+  width: 100%;
+  height: calc(100% - 200px);
 }

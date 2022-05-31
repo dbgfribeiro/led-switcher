@@ -29,6 +29,11 @@ $(document).ready(function(){
 /*----------------SKETCH---------------*/
 
 let cam;
+var capture;
+let yoff = 0.0; // 2nd dimension of perlin noise
+
+var w = 640;
+var h = 480;
 
 function setup() {
   let canvasDiv = document.getElementById('sketch-container');
@@ -38,15 +43,49 @@ function setup() {
   console.log(sketchCanvas);
   sketchCanvas.parent("sketch-container");
   
-  cam = createCapture(VIDEO);
-  cam.size(1600, 800);
+  //cam = createCapture(VIDEO);
+  //cam.size(1800, 800);
+
+  capture = createCapture({
+    audio: false,
+    video: {
+      width: w,
+      height: h
+    }
+  }, function() {
+    console.log('capture ready.')
+  });
+  capture.elt.setAttribute('playsinline', '');
+  capture.hide();
+  capture.size(w, h);
 }
 
 function draw() {
-  background(0);
+  background('#000');
 
-  translate(width / 2, height / 2);
-  imageMode(CENTER);
-  image(cam, 0, 0, width, height);
+  image(capture, 0, 0, width, height-130);
+  // fill('#f00');
+  // rect(0, 0, width, height-160);
   filter(POSTERIZE, Led1Status+2);
+
+  noStroke();
+  fill(240, 223, 2, 200)
+  beginShape();
+
+  let xoff = 0;
+  for (let x = 0; x <= width+10; x += 10) {
+    let y = map(noise(xoff, yoff), 0, 1, 200, 300);
+
+    vertex(x, y+330);
+    // Noise Increment
+    xoff += (Led1Status / 10);
+  }
+  yoff += 0.01;
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
+
+  fill('#FFF');
+  textSize(24);
+  text((Led1Status * 10) + '%' , (width/2) - 10, height - 50);
 }

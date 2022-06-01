@@ -56,14 +56,14 @@ function draw() {
   image(capture, 0, 0, width, height-130);
   filter(POSTERIZE, TiltStatus+2);
 
-  noStroke();
-  fill(240, 223, 2, 200)
-  beginShape();
-
 
   /*---↓---Não mexer---↓---*/
 
   /*-Waves-*/
+  noStroke();
+  fill(240, 223, 2, 200)
+  beginShape();
+
   let xoff = 0;
   for (let x = 0; x <= width+10; x += 10) {
     let y = map(noise(xoff, yoff), 0, 1, 200, 300);

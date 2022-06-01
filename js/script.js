@@ -1,64 +1,31 @@
 // Initialize Firebase
-var Led1Status;
+var TiltStatus;
 
 $(document).ready(function(){
   var database = firebase.database();
 
   database.ref().on("value", function(snap){
     
-    Led1Status = snap.val().Led1Status;
+    TiltStatus = snap.val().TiltStatus;
 
-    console.log(Led1Status);
-    //$( ".wrapper h1" ).html(Led1Status);
+    console.log(TiltStatus);
+    //$( ".wrapper h1" ).html(TiltStatus);
   })
 });
 
 /*----------------SKETCH---------------*/
-
-// var capture;
-// var w = 640;
-// var h = 480;
-
-// function setup() {
-//   let canvasDiv = document.getElementById('sketch-container');
-//   let deviceWidth = canvasDiv.offsetWidth;
-//   let deviceHeight = canvasDiv.offsetHeight;
-//   let sketchCanvas = createCanvas(deviceWidth, deviceHeight);
-//   sketchCanvas.parent("sketch-container");
-
-//   capture = createCapture({
-//     audio: false,
-//     video: {
-//       width: w,
-//       height: h
-//     }
-//   }, function() {
-//     console.log('capture ready.')
-//   });
-//   capture.elt.setAttribute('playsinline', '');
-//   capture.hide();
-//   capture.size(w, h);
-// }
-
-// function draw() {
-//   background('#000');
-
-//   image(capture, 0, 0, width, height);
-//   filter(POSTERIZE, Led1Status+2);
-// }
+let canvasDiv = document.getElementById('sketch-container');
+let deviceWidth = canvasDiv.offsetWidth;
+let deviceHeight = canvasDiv.offsetHeight;
 
 let captureBtn = document.getElementById('capture');
 var capture;
-let yoff = 0.0; // 2nd dimension of perlin noise
+let yoff = 0.0;
 
 var w = 640;
 var h = 480;
 
 function setup() {
-  let canvasDiv = document.getElementById('sketch-container');
-  let deviceWidth = canvasDiv.offsetWidth;
-  let deviceHeight = canvasDiv.offsetHeight;
-  
   let sketchCanvas = createCanvas(deviceWidth, deviceHeight);
   sketchCanvas.parent("sketch-container");
 
@@ -77,7 +44,7 @@ function setup() {
 
   captureBtn.onclick = function(){
     savedImg = sketchCanvas.get(0, 0, width, height-130);
-    savedImg.save('my-painting', 'png');
+    savedImg.save('my-shake', 'png');
   };
   
 }
@@ -85,20 +52,25 @@ function setup() {
 function draw() {
   background('#000');
 
+  /*-Camera-*/
   image(capture, 0, 0, width, height-130);
-  filter(POSTERIZE, Led1Status+2);
+  filter(POSTERIZE, TiltStatus+2);
 
   noStroke();
   fill(240, 223, 2, 200)
   beginShape();
 
+
+  /*---↓---Não mexer---↓---*/
+
+  /*-Waves-*/
   let xoff = 0;
   for (let x = 0; x <= width+10; x += 10) {
     let y = map(noise(xoff, yoff), 0, 1, 200, 300);
 
     vertex(x, y+375);
     // Noise Increment
-    xoff += (Led1Status / 10);
+    xoff += (TiltStatus / 10);
   }
   yoff += 0.05;
   vertex(width, height);
@@ -107,5 +79,5 @@ function draw() {
 
   fill('#FFF');
   textSize(24);
-  text((Led1Status * 10) + '%' , (width/2) - 10, height - 50);
+  text((TiltStatus * 10) + '%' , (width/2) - 10, height - 50);
 }

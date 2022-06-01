@@ -9,6 +9,7 @@
 #define WIFI_PASSWORD "*************" //your wifi PASSWORD
 
 #define TiltPin D0
+#define LED D4
 float shakes = 0;
 
 #define FIREBASE_HOST "shake-n-take-default-rtdb.firebaseio.com"
@@ -17,6 +18,7 @@ FirebaseData firebaseData;
 
 void setup () {
   pinMode(TiltPin, OUTPUT);
+  pinMode(LED, OUTPUT);
   Serial.begin(9600);
 
   // connect to wifi.
@@ -35,16 +37,17 @@ void setup () {
 }
 
 void loop () {
-  
+  digitalWrite(LED, HIGH);
   // If the sensor is stable, 'shakes remains == 0
   if (digitalRead(TiltPin) == 1) {
     shakes = 0;
   }
   // If the box is shaked 'shakes' is incremented
-  else {
+  else if (shakes < 10){
     shakes += 0.5;
   }
-  Firebase.setFloat(firebaseData, "/Led1Status", shakes);
-  //Serial.println(Firebase.getString(firebaseData, "/Led1Status"));
+  Firebase.setFloat(firebaseData, "/TiltStatus", shakes);
+  //Serial.println(Firebase.getString(firebaseData, "/TiltStatus"));
+  Serial.println(shakes);
   delay(100);
 }

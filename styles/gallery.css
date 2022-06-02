@@ -1,0 +1,46 @@
+.gallery-wrapper {
+  /* min-height: 100vh; */
+  height: 100%;
+}
+
+.gallery-container {
+  width: 95%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.gallery-container img {
+  border: 1px solid #ebebeb;
+  width: 100%;
+  height: 125px;
+  object-fit: cover;
+}
+
+.zoomin-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  padding: 1rem;
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.zoomin-modal-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.zoomin-modal img {
+  max-width: 100%;
+  z-index: 3;
+}

@@ -27,19 +27,21 @@
       </div>
       
       <div id="sketch-container"></div>
+      <div class="loading-container">
+        <h1></h1>
+      </div>
 
       <div class="bottom-bar">
         <a href="gallery.html" class="gallery-btn">
-          <img src="" alt="gallery-preview" id="preview">
+          <img src="" alt="gallery-preview" id="img-preview">
         </a>
         <button id="capture"></button>
-        <a href="">R</a>
       </div>
     </div>
 
     <script src = "js/firebase.js"></script>
-    <script src = "js/script.js"></script>
-    <script src = "js/waves.js"></script>
+    <script src = "js/sketch.js"></script>
+    <script src = "js/loading.js"></script>
 
     <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-app.js'
@@ -49,12 +51,13 @@
       const app = initializeApp(firebaseConfig);
       const storage = getStorage(app);
   
-      /*-------------Add canvas to storage--------------*/
+      /*-------------Add image to storage--------------*/
       const storageRef = ref(storage, 'images/test' +  new Date().getTime() + '.png');
   
       var newImg = document.createElement('img');
   
       document.getElementById('capture').onclick = function(){
+        loading();
         document.querySelector("canvas").toBlob(function(blob) {
           newImg.src = URL.createObjectURL(blob);
           
@@ -65,12 +68,53 @@
         });
       }
 
+      /*-------------Download captured image--------------*/
       function downloadImage() {
         var link = document.createElement('a');
         link.download = 'myShake.png';
         link.href = document.querySelector('canvas').toDataURL();
         link.click();
+        document.location.reload(true);
       }
+
+      /*-------------Loading--------------*/
+      function loading(){
+        let counter = 4;
+        let loadingContainer = document.querySelector('.loading-container');
+        loadingContainer.style.display = 'block';
+        setInterval(function(){ 
+          if(counter > 0) {
+            counter--;
+            loadingContainer.querySelector('h1').innerHTML = counter;
+          }
+          else{
+            loadingContainer.style.display = 'none';
+          }
+        }, 1000);
+      };
+
+      /*-------------Get last storaged image--------------*/
+      let allImages;
+      //let storageImg;
+      let storageImg = document.getElementById('img-preview');
+
+      const listRef = ref(storage, 'images');
+      listAll(listRef).then((res) => {
+        allImages = (res.items).length;
+
+        res.items.forEach((itemRef, i) => {
+          const downloadUrl = getDownloadURL(ref(storage, itemRef));
+
+          downloadUrl.then((url) => {
+            if(i === allImages-1) {
+              storageImg.src = url;
+            }
+          }).catch((error) => {
+            console.log('Something went wrong');
+          });
+        });
+      });
+      
     </script>
   </body>
 </html>

@@ -41,12 +41,6 @@ function setup() {
   capture.elt.setAttribute('playsinline', '');
   capture.hide();
   capture.size(w, h);
-
-  // captureBtn.onclick = function(){
-  //   savedImg = sketchCanvas.get(0, 0, width, height-130);
-  //   savedImg.save('my-shake', 'png');
-  // };
-  
 }
 
 function draw() {

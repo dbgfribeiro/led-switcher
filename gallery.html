@@ -33,11 +33,19 @@
       <div class="gallery-container">
       </div>
 
+      <div class="zoomin-modal">
+        <div class="zoomin-modal-overlay"
+          onClick="(function(){
+            document.querySelector('.zoomin-modal').style.display = 'none';
+            return false;
+          })();return false;"
+        ></div>
+        <img src="" alt="preview-img" id="preview-img">
+      </div>
+
     </div>
 
     <script src = "js/firebase.js"></script>
-    <script src = "js/script.js"></script>
-    <script src = "js/waves.js"></script>
 
     <script type="module">
       import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-app.js'
@@ -59,16 +67,28 @@
           const downloadUrl = getDownloadURL(ref(storage, itemRef));
           downloadUrl.then((url) => {
   
-            //Create an image tag for each url
+            // Create an image tag for each url
             let newImg = document.createElement('img');
             newImg.src = url;
             gallery.appendChild(newImg);
+
+            // Zoom-in an image
+            let previewModal = document.querySelector('.zoomin-modal');
+            let imagePreview = previewModal.querySelector('#preview-img');
+
+            gallery.querySelectorAll('img').forEach(el => {
+              el.addEventListener('click', (e) => {
+                imagePreview.src = el.src;
+                previewModal.style.display = 'flex';
+              })
+            })
   
             }).catch((error) => {
               console.log('Something went wrong');
             });
           });
         });
+
     </script>
   </body>
 </html>

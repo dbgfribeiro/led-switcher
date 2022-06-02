@@ -1,0 +1,19 @@
+.gallery-wrapper {
+  /* min-height: 100vh; */
+  height: 100%;
+}
+.gallery-container {
+  width: 95%;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.gallery-container img{
+  border: 1px solid #ebebeb;
+  width: 100%;
+  height: auto;
+}

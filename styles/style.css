@@ -8,19 +8,21 @@ html{
 }
 body{
   overflow: hidden;
-}
-
-.wrapper{
-  background: #101010;
   max-width: 800px;
   height: 100vh;
   width: 100%;
   margin: 0 auto;
+}
+
+.wrapper {
+  background: #101010;
+  height: 100%;
+  width: 100%;
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
+  /* justify-content: space-between; */  
   align-items: center;
 
   position: relative;

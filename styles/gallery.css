@@ -38,9 +38,11 @@
   position: absolute;
   left: 0;
   top: 0;
+  padding: 2rem;
 }
 
 .zoomin-modal img {
-  max-width: 100%;
+  width: 100%;
+  max-width: 500px;
   z-index: 3;
 }

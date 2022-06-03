@@ -1,6 +1,20 @@
 // Initialize Firebase
 var TiltStatus;
 
+// Waves Design
+var wavesContainer = document.getElementById("waves-container");
+var siriWave = new SiriWave({
+  container: wavesContainer,
+  color: '#F0DF02',
+  width: wavesContainer.offsetWidth + 4,
+  height: wavesContainer.offsetHeight,
+  speed: 0.05,
+  amplitude: 0.05,
+  frequency: 10
+});
+
+
+// Update Tilt Status
 $(document).ready(function(){
   var database = firebase.database();
 
@@ -9,23 +23,21 @@ $(document).ready(function(){
     TiltStatus = snap.val().TiltStatus;
 
     console.log(TiltStatus);
-    //$( ".wrapper h1" ).html(TiltStatus);
+    siriWave.speed += TiltStatus/200
+    siriWave.amplitude += TiltStatus/100;
+    siriWave.frequency += TiltStatus*10;
   })
 });
 
 /*----------------SKETCH---------------*/
-let canvasDiv = document.getElementById('sketch-container');
-let deviceWidth = canvasDiv.offsetWidth;
-let deviceHeight = canvasDiv.offsetHeight;
-
-let captureBtn = document.getElementById('capture');
 var capture;
-let yoff = 0.0;
-
 var w = 640;
 var h = 480;
 
 function setup() {
+  let canvasDiv = document.getElementById('sketch-container');
+  let deviceWidth = canvasDiv.offsetWidth;
+  let deviceHeight = canvasDiv.offsetHeight;
   let sketchCanvas = createCanvas(deviceWidth, deviceHeight);
   sketchCanvas.parent("sketch-container");
 
@@ -47,31 +59,6 @@ function draw() {
   background('#000');
 
   /*-Camera-*/
-  image(capture, 0, 0, width, height-130);
+  image(capture, 0, 0, width, height);
   filter(POSTERIZE, TiltStatus+2);
-
-
-  /*---↓---Não mexer---↓---*/
-
-  /*-Waves-*/
-  noStroke();
-  fill(240, 223, 2, 200)
-  beginShape();
-
-  let xoff = 0;
-  for (let x = 0; x <= width+10; x += 10) {
-    let y = map(noise(xoff, yoff), 0, 1, 200, 300);
-
-    vertex(x, y+375);
-    // Noise Increment
-    xoff += (TiltStatus / 10);
-  }
-  yoff += 0.05;
-  vertex(width, height);
-  vertex(0, height);
-  endShape(CLOSE);
-
-  fill('#FFF');
-  textSize(24);
-  text((TiltStatus * 10) + '%' , (width/2) - 10, height - 50);
 }

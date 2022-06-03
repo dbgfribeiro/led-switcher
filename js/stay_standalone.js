@@ -1,23 +1,16 @@
-// Mobile Safari in standalone mode
-if(("standalone" in window.navigator) && window.navigator.standalone){
-
-	// If you want to prevent remote links in standalone web apps opening Mobile Safari, change 'remotes' to true
-	var noddy, remotes = false;
-	
-	document.addEventListener('click', function(event) {
-		
-		noddy = event.target;
-		
-		// Bubble up until we hit link or top HTML element. Warning: BODY element is not compulsory so better to stop on HTML
-		while(noddy.nodeName !== "A" && noddy.nodeName !== "HTML") {
-	        noddy = noddy.parentNode;
-	    }
-		
-		if('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(document.location.host) !== -1 || remotes))
-		{
-			event.preventDefault();
-			document.location.href = noddy.href;
-		}
-	
-	},false);
+if (('standalone' in navigator) && navigator.standalone) {
+  document.addEventListener('click', function(e) {
+    var curnode = e.target
+    while (!(/^(a|html)$/i).test(curnode.nodeName)) {
+      curnode = curnode.parentNode
+    }
+    if ('href' in curnode
+      && (chref = curnode.href).replace(document.location.href, '').indexOf('#')
+      && (!(/^[a-z\+\.\-]+:/i).test(chref)
+      || chref.indexOf(document.location.protocol + '//' + document.location.host) === 0)
+    ) {
+      e.preventDefault()
+      document.location.href = curnode.href
+    }
+  }, false)
 }

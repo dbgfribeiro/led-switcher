@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="icon" href="./assets/icon.png">
+    <link rel="apple-touch-icon" href="./assets/icon.png">
+    <title>Shake&Take</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+    <script src="js/stay_standalone.js" type="text/javascript"></script>
+    
+    <link rel="stylesheet" type="text/css" href ="styles/style.css">
+    <link rel="stylesheet" type="text/css" href ="styles/navigation.css">
+    <link rel="stylesheet" type="text/css" href ="styles/gallery.css">
+  </head>
+  
+  <body>
+    <div class="wrapper gallery-wrapper">
+      <div class="top-bar">
+        <a href="./index.html" id="back-btn">
+          <img src="assets/chevron.svg" alt="chevron-left">
+          <span>Back</span>
+        </a>
+        <img src="assets/logo.svg" alt="logo" id="logo">
+      </div>
+
+      <div class="gallery-container">
+      </div>
+
+      <div class="zoomin-modal">
+        <div class="zoomin-modal-overlay"
+          onClick="(function(){
+            document.querySelector('.zoomin-modal').style.display = 'none';
+            return false;
+          })();return false;"
+        ></div>
+        <img src="" alt="preview-img" id="preview-img">
+      </div>
+
+    </div>
+
+    <script src = "js/firebase.js"></script>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-app.js'
+      import { getStorage, ref, uploadBytes, listAll, getDownloadURL , getMetadata} from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-storage.js'
+  
+      /*-------------Initalize storage------------*/
+      const app = initializeApp(firebaseConfig);
+      const storage = getStorage(app);
+  
+      /*-------------Get storaged images--------------*/
+      let gallery = document.querySelector('.gallery-container');
+      let allImages;
+      
+      const listRef = ref(storage, 'images');
+      listAll(listRef).then((res) => {
+  
+        res.items.forEach((itemRef) => {
+          
+          const downloadUrl = getDownloadURL(ref(storage, itemRef));
+          downloadUrl.then((url) => {
+  
+            // Create an image tag for each url
+            let newImg = document.createElement('img');
+            newImg.src = url;
+            gallery.appendChild(newImg);
+
+            // Zoom-in an image
+            let previewModal = document.querySelector('.zoomin-modal');
+            let imagePreview = previewModal.querySelector('#preview-img');
+
+            // Add storage images to gallery
+            gallery.querySelectorAll('img').forEach(el => {
+              el.addEventListener('click', (e) => {
+                imagePreview.src = el.src;
+                previewModal.style.display = 'flex';
+              })
+            })
+  
+            }).catch((error) => {
+              console.log('Something went wrong');
+            });
+          });
+        });
+
+    </script>
+  </body>
+</html>

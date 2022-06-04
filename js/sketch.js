@@ -1,7 +1,17 @@
+/*----------------SET FILTER---------------*/
+let selectedFilter;
+let filters = document.querySelector('.filters-list');
+filters.querySelectorAll('button').forEach(el => {
+  el.addEventListener('click', (e) => {
+    selectedFilter = el.id;
+    filters.style.display = 'none';
+  })
+})
+
 // Initialize Firebase
 var TiltStatus;
 
-// Waves Design
+/*----------------WAVES---------------*/
 var wavesContainer = document.getElementById("waves-container");
 var siriWave = new SiriWave({
   container: wavesContainer,
@@ -60,5 +70,13 @@ function draw() {
 
   /*-Camera-*/
   image(capture, 0, 0, width, height);
-  filter(POSTERIZE, TiltStatus+2);
+  if(selectedFilter == 'filter1') {
+    filter(POSTERIZE, TiltStatus+2);
+  }
+  else if(selectedFilter == 'filter2') {
+    tint(0, 153, 204);
+  }
+  else {
+    noTint();
+  }
 }

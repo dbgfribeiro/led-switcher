@@ -31,6 +31,22 @@
         <img src="assets/logo.svg" alt="logo" id="logo">
       </div>
       
+      <div class="filters-list">
+        <h2>Choose your filter:</h2>
+        <div class="filters">
+          <button id="filter1">Filter 1</button>
+          <button id="filter2">Filter 2</button>
+        </div>
+        <button
+          id="no-filter"
+          onClick="(function(){
+            document.querySelector('.filters-list').style.display = 'none';
+            return false;
+          })();return false;"
+          >No filter needed
+        </button>
+      </div>
+      
       <div id="sketch-container"></div>
       <div id="waves-container"></div>
       <div class="loading-container">
@@ -41,7 +57,18 @@
         <a href="./gallery.html" class="gallery-btn">
           <img src="" alt="gallery-preview" id="img-preview">
         </a>
+
         <button id="capture"></button>
+
+        <button
+          id="filters-btn"
+          onClick="(function(){
+            document.querySelector('.filters-list').style.display = 'flex';
+            return false;
+          })();return false;"
+        >
+          <img src="./assets/filters.svg" alt="filters-icon">
+        </button>
       </div>
     </div>
 

@@ -16,7 +16,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     <script src="js/stay_standalone.js" type="text/javascript"></script>
 
@@ -32,19 +32,33 @@
       </div>
       
       <div class="filters-list">
-        <h2>Choose your filter:</h2>
-        <div class="filters">
-          <button id="filter1">Filter 1</button>
-          <button id="filter2">Filter 2</button>
-        </div>
-        <button
-          id="no-filter"
+        <div class="filters-list-overlay"
           onClick="(function(){
             document.querySelector('.filters-list').style.display = 'none';
             return false;
           })();return false;"
-          >No filter needed
-        </button>
+        ></div>
+        <div class="filters-list-container">
+          <h2>Choose your filter:</h2>
+          <div class="filters">
+            <button id="posterize">
+              <img src="./assets/posterize.png" alt="posterize-demo">
+              <!-- Posterize -->
+            </button>
+            <button id="threshold">
+              <img src="./assets/threshold.png" alt="threshold-demo">
+              <!-- Threshold -->
+            </button>
+          </div>
+          <button
+            id="no-filter"
+            onClick="(function(){
+              document.querySelector('.filters-list').style.display = 'none';
+              return false;
+            })();return false;"
+            >No filter needed
+          </button>
+        </div>
       </div>
       
       <div id="sketch-container"></div>
@@ -74,6 +88,7 @@
 
     <script src = "js/firebase.js"></script>
     <script src = "js/sketch.js"></script>
+    <script src = "js/waves.js"></script>
 
     <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-app.js'
@@ -84,7 +99,7 @@
       const storage = getStorage(app);
   
       /*-------------Add image to storage--------------*/
-      const storageRef = ref(storage, 'images/test' +  new Date().getTime() + '.png');
+      const storageRef = ref(storage, 'images/shake' +  new Date().getTime() + '.png');
       var newImg = document.createElement('img');
   
       document.getElementById('capture').onclick = function(){
@@ -110,18 +125,9 @@
 
       /*-------------Loading--------------*/
       function loading(){
-        let counter = 4;
         let loadingContainer = document.querySelector('.loading-container');
         loadingContainer.style.display = 'block';
-        setInterval(function(){ 
-          if(counter > 0) {
-            counter--;
-            loadingContainer.querySelector('h1').innerHTML = counter;
-          }
-          else{
-            loadingContainer.style.display = 'none';
-          }
-        }, 500);
+        loadingContainer.querySelector('h1').innerHTML = "Smile...";
       };
 
       /*-------------Get last storaged image--------------*/

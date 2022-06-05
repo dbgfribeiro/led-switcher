@@ -8,40 +8,20 @@ filters.querySelectorAll('button').forEach(el => {
   })
 })
 
-// Initialize Firebase
+// Update Tilt Status
 var TiltStatus;
 
-/*----------------WAVES---------------*/
-var wavesContainer = document.getElementById("waves-container");
-var siriWave = new SiriWave({
-  container: wavesContainer,
-  color: '#F0DF02',
-  width: wavesContainer.offsetWidth + 4,
-  height: wavesContainer.offsetHeight,
-  speed: 0.05,
-  amplitude: 0.05,
-  frequency: 10
-});
-
-
-// Update Tilt Status
 $(document).ready(function(){
   var database = firebase.database();
-
   database.ref().on("value", function(snap){
-    
     TiltStatus = snap.val().TiltStatus;
-
     console.log(TiltStatus);
-    siriWave.speed += TiltStatus/200
-    siriWave.amplitude += TiltStatus/100;
-    siriWave.frequency += TiltStatus*10;
   })
 });
 
 /*----------------SKETCH---------------*/
 var capture;
-var w = 640;
+var w = 480;
 var h = 480;
 
 function setup() {
@@ -66,17 +46,61 @@ function setup() {
 }
 
 function draw() {
-  background('#000');
-
-  /*-Camera-*/
-  image(capture, 0, 0, width, height);
-  if(selectedFilter == 'filter1') {
-    filter(POSTERIZE, TiltStatus+2);
+  if(selectedFilter === 'posterize') {
+    posterizeFilter();
   }
-  else if(selectedFilter == 'filter2') {
-    tint(0, 153, 204);
+  else if(selectedFilter === 'threshold') {
+    thresholdFilter();
   }
   else {
-    noTint();
+    noFilter();
   }
+}
+
+/*------------------------------------Posterize------------------------------------*/
+function posterizeFilter() {
+  background('#000');
+  image(capture, 0, 0, width, height);
+  filter(POSTERIZE, (-TiltStatus) +12);
+}
+
+/*------------------------------------Threshold------------------------------------*/
+function thresholdFilter() {
+  background(255);
+  fill(0);
+  noStroke();
+
+  capture.loadPixels();
+  
+  let threshold = map((TiltStatus*20) + 50, 0, width, 0, 1);
+  
+  for (let x = 0; x < capture.width; x++) {
+    for (let y = 0; y < capture.height; y++) {
+      let i = (x + y * capture.width) * 4;
+      let r = capture.pixels[i+0];
+      let g = capture.pixels[i+1];
+      let b = capture.pixels[i+2];
+      let a = capture.pixels[i+3];
+      
+      let pixelColor;
+      if ((r / 255) > threshold) {
+        pixelColor = 255;
+      } else {
+        pixelColor = 0;
+      }
+      
+      capture.pixels[i+0] = pixelColor;
+      capture.pixels[i+1] = pixelColor;
+      capture.pixels[i+2] = pixelColor;
+    }
+  }
+  capture.updatePixels();
+  
+  image(capture, 0, 0, width, height);
+}
+
+/*------------------------------------No Filter------------------------------------*/
+function noFilter() {
+  background('#000');
+  image(capture, 0, 0, width, height);
 }

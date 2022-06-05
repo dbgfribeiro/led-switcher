@@ -5,8 +5,8 @@
 #include <ESP8266WiFi.h>
 #endif
 
-#define WIFI_SSID "***-****-****" // your wifi SSID
-#define WIFI_PASSWORD "*************" //your wifi PASSWORD
+#define WIFI_SSID "***-****-****"
+#define WIFI_PASSWORD "*************"
 
 #define TiltPin D0
 #define LED D4
